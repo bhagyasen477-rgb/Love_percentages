@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f2fa">
+<title>Love Math ❤️</title>
+
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f7f2fa;
+  --surface: #fff7ff;
+  --card: #ffffff;
+  --text: #201a23;
+  --muted: #706773;
+  --primary: #8b245c;
+  --on-primary: #ffffff;
+  --secondary: #f4dce9;
+  --outline: #d9cedb;
+  --track: #eadde8;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #151117;
+  --surface: #211923;
+  --card: #29212e;
+  --text: #f5edf7;
+  --muted: #c5b7c9;
+  --primary: #ffafd5;
+  --on-primary: #40102c;
+  --secondary: #493043;
+  --outline: #554858;
+  --track: #493747;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Roboto", "Arial", sans-serif;
+  min-height: 100vh;
+  transition: background .2s, color .2s;
+}
+header {
+  max-width: 720px;
+  margin: auto;
+  padding: 24px 20px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.brand { font-size: 20px; font-weight: 700; }
+.icon-button {
+  width: 46px; height: 46px;
+  border: 1px solid var(--outline);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+}
+main {
+  max-width: 540px;
+  margin: 22px auto;
+  padding: 0 18px 36px;
+}
+.intro { text-align: center; margin: 24px 0 26px; }
+.heart { font-size: 48px; }
+h1 { font-size: clamp(29px, 7vw, 40px); margin: 10px 0; }
+.intro p { color: var(--muted); line-height: 1.6; margin: 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--outline);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 4px 16px #4323440a;
+}
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 9px;
+}
+.field { margin-bottom: 19px; }
+input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 16px;
+  border: 1px solid var(--outline);
+  border-radius: 15px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+}
+input:focus { border: 2px solid var(--primary); }
+.heart-divider {
+  text-align: center;
+  color: var(--primary);
+  font-size: 26px;
+  margin: -4px 0 16px;
+}
+button { font: inherit; }
+.primary-button {
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  border-radius: 100px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+.primary-button:active { transform: scale(.98); }
+.result {
+  display: none;
+  text-align: center;
+  margin-top: 22px;
+}
+.result.show { display: block; }
+.result-label { color: var(--muted); font-size: 14px; }
+.score {
+  color: var(--primary);
+  font-size: 66px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  margin: 8px 0 12px;
+}
+.progress {
+  height: 12px;
+  border-radius: 100px;
+  background: var(--track);
+  overflow: hidden;
+  margin: 16px 0;
+}
+.bar {
+  width: 0;
+  height: 100%;
+  background: var(--primary);
+  border-radius: inherit;
+  transition: width .7s ease;
+}
+.message { font-size: 17px; font-weight: 600; margin: 15px 0; }
+.names { color: var(--muted); overflow-wrap: anywhere; }
+.actions { display: flex; gap: 10px; margin-top: 18px; }
+.secondary-button {
+  flex: 1;
+  min-height: 48px;
+  border-radius: 100px;
+  border: 1px solid var(--outline);
+  background: var(--secondary);
+  color: var(--text);
+  cursor: pointer;
+}
+.note {
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 22px 8px;
+}
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 10px 24px; }
+@media (max-width: 380px) {
+  .card { padding: 18px; }
+  .score { font-size: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="brand">❤️ Love Math</div>
+  <button class="icon-button" id="themeBtn"
+    aria-label="Toggle dark theme" title="Toggle theme">☾</button>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="heart">💗</div>
+    <h1>Love Calculator</h1>
+    <p>Two names, one little love experiment.<br>
+    Let's calculate your name compatibility!</p>
+  </section>
+
+  <section class="card">
+    <form id="loveForm">
+      <div class="field">
+        <label for="name1">Your name</label>
+        <input id="name1" maxlength="60" placeholder="Enter your name"
+          autocomplete="given-name" required>
+      </div>
+
+      <div class="heart-divider">♥</div>
+
+      <div class="field">
+        <label for="name2">Their name</label>
+        <input id="name2" maxlength="60" placeholder="Enter their name"
+          autocomplete="off" required>
+      </div>
+
+      <button class="primary-button" type="submit">
+        Calculate Love ♥
+      </button>
+    </form>
+
+    <section class="result" id="result" aria-live="polite">
+      <div class="result-label">Your name-based love score</div>
+      <div class="score" id="score">0%</div>
+      <div class="progress" role="progressbar"
+        aria-label="Name-based compatibility score"
+        aria-valuemin="0" aria-valuemax="100" id="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+      <div class="message" id="message"></div>
+      <div class="names" id="names"></div>
+
+      <div class="actions">
+        <button type="button" class="secondary-button" id="copyBtn">
+          Copy result
+        </button>
+        <button type="button" class="secondary-button" id="shareBtn">
+          Share ↗
+        </button>
+      </div>
+    </section>
+  </section>
+
+  <p class="note">
+    💕 Just for fun! This score is generated deterministically from
+    the names you enter. It is not a scientific measurement of love,
+    personality, or relationship compatibility.
+  </p>
+</main>
+
+<footer>Made with ♥ for the curious romantics</footer>
+
+<script>
+const form = document.getElementById("loveForm");
+const result = document.getElementById("result");
+const scoreEl = document.getElementById("score");
+const bar = document.getElementById("bar");
+const message = document.getElementById("message");
+const names = document.getElementById("names");
+const progress = document.getElementById("progress");
+
+let latestResult = "";
+
+function normalizeName(value) {
+  return value.trim().normalize("NFKC").toLocaleLowerCase();
+}
+
+// A deterministic hash: identical names always produce the same score.
+// The order is normalized, so swapping the two names does not change it.
+function calculateLove(a, b) {
+  const pair = [normalizeName(a), normalizeName(b)].sort();
+  const input = pair.join("|");
+  let hash = 2166136261;
+
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 0x7feb352d);
+  hash ^= hash >>> 15;
+  hash = Math.imul(hash, 0x846ca68b);
+  hash ^= hash >>> 16;
+
+  // Map the stable hash into a percentage from 50 to 100.
+  return 50 + ((hash >>> 0) % 51);
+}
+
+function getMessage(score) {
+  if (score >= 90) return "A lovely name combination! 💖";
+  if (score >= 80) return "A sweet combination! 🌸";
+  if (score >= 70) return "A charming little match! 💕";
+  if (score >= 60) return "A delightful name pairing! 🌷";
+  return "Every connection has its own story! ❤️";
+}
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const a = document.getElementById("name1").value.trim();
+  const b = document.getElementById("name2").value.trim();
+
+  if (!a || !b) {
+    form.reportValidity();
+    return;
+  }
+
+  if (normalizeName(a) === normalizeName(b)) {
+    message.textContent = "Try entering two different names 💗";
+    result.classList.add("show");
+    scoreEl.textContent = "—";
+    bar.style.width = "0%";
+    names.textContent = "";
+    latestResult = "";
+    return;
+  }
+
+  const score = calculateLove(a, b);
+  scoreEl.textContent = score + "%";
+  message.textContent = getMessage(score);
+  names.textContent = a + " ♥ " + b;
+  progress.setAttribute("aria-valuenow", score);
+  bar.style.width = score + "%";
+
+  latestResult =
+    "❤️ Love Math ❤️\n" + a + " + " + b +
+    "\nName-based score: " + score + "%\n" +
+    "Just for fun, not a scientific compatibility measure.";
+
+  result.classList.add("show");
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  if (!latestResult) return;
+  try {
+    await navigator.clipboard.writeText(latestResult);
+    document.getElementById("copyBtn").textContent = "Copied ✓";
+  } catch {
+    window.prompt("Copy your result:", latestResult);
+  }
+});
+
+document.getElementById("shareBtn").addEventListener("click", async () => {
+  if (!latestResult) return;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Love Math ❤️", text: latestResult });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        window.prompt("Copy your result:", latestResult);
+      }
+    }
+  } else {
+    try {
+      await navigator.clipboard.writeText(latestResult);
+      alert("Result copied! You can share it with your friends.");
+    } catch {
+      window.prompt("Copy your result:", latestResult);
+    }
+  }
+});
+
+const themeBtn = document.getElementById("themeBtn");
+themeBtn.addEventListener("click", () => {
+  const dark = document.documentElement.dataset.theme !== "dark";
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  themeBtn.textContent = dark ? "☀" : "☾";
+  themeBtn.setAttribute("aria-label",
+    dark ? "Switch to light theme" : "Switch to dark theme");
+  document.querySelector('meta[name="theme-color"]')
+    .setAttribute("content", dark ? "#151117" : "#f7f2fa");
+});
+</script>
+</body>
+</html>
